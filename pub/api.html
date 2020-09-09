@@ -1,0 +1,675 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>API | JScene.js</title>
+	<meta charset="UTF-8">
+
+	<link type="text/css" rel="stylesheet" href="style/style.css">
+	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,700">
+
+	<link type="text/css" rel="stylesheet" href="style/prism.css">
+</head>
+<body class="examples">
+	<header class="main-header"> <!-- top menu -->
+		<div class="container clearfix">
+			<div class="main-nav">
+				<nav>
+				<ul class="clearfix">
+					
+					<li>
+						<a class="text-link" href="https://github.com/csc309-summer-2020/js-library-songzhif/blob/master/pub/js/JScene.js" rel="external">Download</a>
+					</li>
+					<li>
+						<a class="text-link" id="nav-api" href="api.html">API</a>
+					</li>
+					<li>
+						<a class="text-link" id="nav-examples" href="examples.html">Examples</a>
+					</li>
+					<li>
+						<a class="text-link" href="landingpage.html" target="_blank" rel="external">Landing</a>
+					</li>
+				</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<div class="main-content">
+
+
+
+
+		<div class="container bloc">
+			<div class="title-bloc">
+				<h1>API Methods</h1>
+			</div>
+			<h2>Getting Started</h2>
+			<div class="sub_bloc">
+				<p>To use JScene API, you need to <a href="https://github.com/csc309-summer-2020/js-library-songzhif/blob/master/pub/js/JScene.js">download</a> and reference <strong>JScene.js</strong> in the HTML file.</p>
+				<pre><code class="language-html">&lt;script src=&quot;/path/to/JScene.js&quot;&gt;&lt;/script&gt;</code></pre>
+				<p>Add the HTML <strong>&lt;canvas&gt;</strong> tag, which will be our 3D viewport.</p>
+				<pre><code class="language-html">&lt;canvas id="canvas"&gt;&lt;/canvas&gt;</code></pre>
+				<p>Create a <strong>Scene</strong> object, then draw it to the canvas.</p>
+				<pre><code class="language-html">&lt;script&gt;
+	var canvas= document.getElementById('canvas');
+	var scene = new Scene();
+	var recur_depth = 5;//how many time lights can reflect between objects
+	render_canvas_native(canvas,scene,recur_depth);
+&lt;/script&gt;</code></pre>
+			</div>
+		</div>
+
+
+		<div class="container bloc">
+			<h2>Scene/World Setting</h2>
+			<div class="sub_bloc">
+			<p>The scene is a collection of <strong>Camera</strong>, <strong>Light</strong>, and <strong>Object</strong>; all of them come with a <strong>.name</strong> property. It becomes handy when we have UI to control the scene.  <br>The objects that most related to the output of canvas are <strong>Camera</strong> and <strong>Lights</strong>. Therefore this section will introduce them.</p>
+
+			<pre><code class="language-js">var scene = new Scene();
+scene.add_camera(/* Camera */);
+scene.add_light(/* Light */);
+//scene.add_object(/* Object */);</code></pre>
+			
+			<h3>Vector</h3>
+			<div class="sub_bloc">
+				<p>Before discussing the actual object, I want to introduce the <strong>Vector</strong> type because it will appear in all places in this library.  <br><strong>Vector</strong> is an upgraded version of the array, which supports mathematics operations between vectors, such as addition, subtraction, multiplication, division, dot/cross product, and get magnitude/normalized. <strong>Vector</strong> is the internal data type of JScene, so you are unable to create the new <strong>Vector</strong> in the global scope. </p>
+				<pre><code class="language-js">//To manually change the XYZ value of Vector location
+location.arr = [newX,newY,newZ];</code></pre>
+			</div>
+			
+			<h3>Camera</h3>
+			<div class="sub_bloc">
+			<p>The camera represents the canvas's 'eye' in the scene. It includes the position, direction, aspect ratio, and focal length (or field of view, in first-person video games).</p>
+			<img class="api_img" src="file/camera.png" ALIGN=”right”>
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">class Camera{
+	constructor(name='newCamera',location=[0,0,0],up=[0,1,0],front=[0,0,1]){
+		this.name = name;
+		this.location = new Vector(location);
+		this.up = new Vector(up);
+		this.front = new Vector(front);
+		this.side = this.up.cross3d(this.front).multiply_const(-1);
+	}
+	focal_length = 2.8;
+	width  = 1.7778;
+	height = 1;
+}</code></pre>
+
+			<div class='text'>Example</div>
+			<pre><code class="language-js">var camera = new Camera();
+camera.focal_length = 1.5;//set focal_length smaller = to make the field of view larger
+camera.width = 1;
+camera.height= 1;//make a square output</code></pre>
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.name</td>
+						<td>'newCamera'</td>
+						<td>String</td>
+						<td>Describe the current camera</td>
+					</tr>
+					<tr>
+						<td>.location</td>
+						<td>[0,0,0]</td>
+						<td>Vector</td>
+						<td>Location of the camera</td>
+					</tr>
+					<tr>
+						<td>.up</td>
+						<td>[0,1,0]</td>
+						<td>Vector</td>
+						<td>Up direction of the camera</td>
+					</tr>
+					<tr>
+						<td>.front</td>
+						<td>[0,0,1]</td>
+						<td>Vector</td>
+						<td>The direction that the camera faces</td>
+					</tr>
+					<tr>
+						<td>.side</td>
+						<td>[-1,0,0]</td>
+						<td>Vector</td>
+						<td>Right direction of the camera</td>
+					</tr>
+					<tr>
+						<td>.focal_length</td>
+						<td>2.8</td>
+						<td>number</td>
+						<td>The distance from a camera to its image plane</td>
+					</tr>
+					<tr>
+						<td>.width</td>
+						<td>1.7778</td>
+						<td>number</td>
+						<td>The width of the image plane</td>
+					</tr>
+					<tr>
+						<td>.height</td>
+						<td>1</td>
+						<td>number</td>
+						<td>The height of the image plane, together with width, define the aspect ratio of the image plane/output</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+
+
+			<h3>Light</h3>
+			<div class="sub_bloc">
+			<p>If the <strong>Camera</strong> is a light receptor, then the <strong>Light</strong> is a light emitter. Without it, the <strong>Scene</strong> can only render a black image.<br>
+			<strong>LightPoint</strong> defines lights launch from one point to all directions,
+			<strong>LightSun</strong> defines lights are all parallel directional light.</p>
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">//LightSun and LightPoint share the same parent and constructor.
+LightPoint(name='newLight',location=[0,1,0],color=[178,178,178]);
+LightSun(name='newLight',location=[0,1,0],color=[178,178,178]);//in this case, the location means the direction</code></pre>
+			<div class='text'>Example</div>
+			<pre><code class="language-js">var bulb = new LightPoint('bulb',[0,1,0]);//light bulb at position y=1
+var sun = new LightSun('sun',[0,1,0]);//sun with light y=1 as direction from light toward the scene.
+bulb.set_color([0,255,0]);//changes the light of the bulb to red light
+sun.set_color([0,0,25]);//changes the light of the sun to dark blue light
+console.log(sun.color.arr);//[0,0,25]</code></pre>
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.name</td>
+						<td>'newLight'</td>
+						<td>String</td>
+						<td>Describe the light</td>
+					</tr>
+					<tr>
+						<td>.location</td>
+						<td>[0,1,0]</td>
+						<td>Vector</td>
+						<td>Location point if its <strong>LightPoint</strong><br>
+							Direction from light toward the scene. if its <strong>LightSun</strong></td>
+					</tr>
+					<tr>
+						<td>.color</td>
+						<td>[178,178,178]</td>
+						<td>Vector</td>
+						<td>Color of the light, by default RGB = [178,178,178] which is grey color, that means the color is white but not very bright</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+			<h3>Material</h3>
+			<div class="sub_bloc" >
+			<p>The <strong>Material</strong> can be placed on the object to define how this <strong>Object</strong> affects the reflected <strong>Light</strong>.  The material contains four RGB colors: <strong>Ambient</strong>, <strong>Diffuse</strong>, <strong>Specular</strong>, <strong>Mirror</strong> Color and one Number is <strong>Phong exponent</strong>.</p>
+			<img class="api_img" src="file/material.png">
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">//Blinn-Phong Approximate Shading Material Parameters
+Material(name='newMaterial',
+	ka=[51, 51, 51],	//Ambient color
+	kd=[204,204,204],	//Diffuse color
+	ks=[25,25,25],		//Specular color
+	km=[25,25,25],		//Mirror color
+	phong_exponent=20	//Phong exponent
+);</code></pre>
+			<div class='text'>Example</div>
+			<pre><code class="language-js">let Lambertian = new Material("grey non-metal", 
+	[51, 51, 51],
+	[204, 204, 204],
+	[25,25,25],
+	[25,25,25],
+	20
+);</code></pre>
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.name</td>
+						<td>'newMaterial'</td>
+						<td>String</td>
+						<td>Describe the material</td>
+					</tr>
+					<tr>
+						<td>.ka</td>
+						<td>[51,51,51]</td>
+						<td>Vector</td>
+						<td>Ambient color 	- <strong>ka</strong> will dye on the surface of the object that is not illuminated by light so that we can distinguish whether there is an object in a location without light</td>
+					</tr>
+					<tr>
+						<td>.kd</td>
+						<td>[204,204,204]</td>
+						<td>Vector</td>
+						<td>Diffuse color 	- Surface color</td>
+					</tr>
+					<tr>
+						<td>.ks</td>
+						<td>[25,25,25]</td>
+						<td>Vector</td>
+						<td>Specular color 	- The brightest spot on the object surface formed by the direct light reflection will be multiple by <strong>ks</strong> coefficient</td>
+					</tr>
+					<tr>
+						<td>.km</td>
+						<td>[25,25,25]</td>
+						<td>Vector</td>
+						<td>Mirror color 	- The brightness of <strong>km</strong> determines how reflective the object is, If <strong>km</strong> is closer to black, the reflection will be less visible.  Pure black will cause the surface of the object not to reflect the image of other objects.  The color of <strong>km</strong> is the coefficient of the reflected light, which affects the tone of the reflected color</td>
+					</tr>
+					<tr>
+						<td>.phong_exponent</td>
+						<td>20</td>
+						<td>Number</td>
+						<td>Phong exponent 	- Size of the light spot on the surface of the object</td>
+					</tr>
+					<tr>
+						<td>.ka_strength</td>
+						<td>0.1</td>
+						<td>Number</td>
+						<td>Set how bright <strong>ka</strong> is, and the range is between 0 and 1.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div> <!-- material sub_bloc-->
+		</div> <!-- Scene/World Setting sub_bloc-->
+		</div><!-- end class="container bloc" -->
+
+
+
+
+
+
+
+
+
+		<div class="container bloc">
+			<h2>Objects</h2>
+			<div class="sub_bloc">
+			<p>Objects can receive and reflect light, and at the same time, affect the color of the reflected light, which follows our common sense.<br>
+<strong>JScene.js</strong> currently supports <strong>Plane</strong>, <strong>Sphere</strong>, and <strong>Triangle</strong>. It is worth mentioning that multiple <strong>Triangle</strong> can form most of the objects we need, which we call it <strong>TriangleSoup</strong>.</p>
+
+
+			<h3>Plane</h3>
+			<div class="sub_bloc">
+			<p>Use a point and a normal to define a boundaryless plane.</p>
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">ObjectPlane(name='newPlane', location=[0,0,0],up=[0,0,0],material=new Material())</code></pre>
+			<div class='text'>Example</div>
+			<pre><code class="language-js">var plane = new ObjectPlane('ground', [0,0,0], [0,1,0]);
+plane.location.arr = [0,-1,0];//move plane lower, assume up is y = 1
+plane.up.arr = [0,1,1];//tilt the plane</code></pre>
+
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.name</td>
+						<td>'newPlane'</td>
+						<td>String</td>
+						<td>Describe the plane</td>
+					</tr>
+					<tr>
+						<td>.location</td>
+						<td>[0,0,0]</td>
+						<td>Vector</td>
+						<td>Point on plane</td>
+					</tr>
+					<tr>
+						<td>.up</td>
+						<td>[0,0,0]</td>
+						<td>Vector</td>
+						<td>Normal of plane</td>
+					</tr>
+					<tr>
+						<td>.material</td>
+						<td>Lambertian</td>
+						<td>Material</td>
+						<td>Material of plane</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+			<h3>Sphere</h3>
+			<div class="sub_bloc">
+			<p>Use position and radius to define a sphere.</p>
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">ObjectSphere(name='newShpere',location=[0,0,0],size=1,material=new Material())</code></pre>
+			<div class='text'>Example</div>
+			<pre><code class="language-js">var sphere = new ObjectSphere('sphere', [0,0,1], 1, Lambertian); //Lambertian defined in the Material section
+sphere.location.arr = [0,0,900];//move the sphere farther from the world origin
+sphere.size = 100;//make sphere larger by changing the radius to 2</code></pre>
+
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.name</td>
+						<td>'newShpere'</td>
+						<td>String</td>
+						<td>Describe the sphere</td>
+					</tr>
+					<tr>
+						<td>.location</td>
+						<td>[0,0,0]</td>
+						<td>Vector</td>
+						<td>Center of sphere</td>
+					</tr>
+					<tr>
+						<td>.size</td>
+						<td>1</td>
+						<td>Number</td>
+						<td>Radius of sphere</td>
+					</tr>
+					<tr>
+						<td>.material</td>
+						<td>Lambertian</td>
+						<td>Material</td>
+						<td>Material of sphere</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+			<h3>Triangle</h3>
+			<div class="sub_bloc">
+			<p>Use three points to define a triangle.</p>
+				<pre><code class="language-js">//NO NAME: 	Triangles will not have a .name, because the meaning of the .name is to name each object
+//			in a UI controlled scene, but Triangle will only use as the data under TriangleSoup, so
+//			these Triangles should preferably share the same name.
+//NO MATERIAL: Due to efficiency reasons and the use of Triangles, the Triangles will share the same
+//			material in the TriangleSoup.</code></pre>
+				
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">ObjectTriangle(corners=[[1,0,0],[0,1,0],[0,0,1]],normal)</code></pre>
+			<p></p>
+			<div class='text'>Example</div>
+			<pre><code class="language-js">//You cannot directly put the triangle in the scene and render it because it has no material.
+//The correct way to render the triangle is to put it in the triangle soup first,
+//and then put the triangle soup into the scene
+var trig1 = new ObjectTriangle([[0,0,2],[-2,0,1],[0,0,1]]);
+//error: triangle corners overlap: [[0,0,0],[0,0,1],[0,0,1]]
+var trig2 = new ObjectTriangle([[0,0,0],[0,0,1],[0,0,1]]);//default corners will apply to trig2</code></pre>
+
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.corners</td>
+						<td>[[1,0,0],[0,1,0],[0,0,1]]</td>
+						<td>Array of Vectors</td>
+						<td>The three vertices of triangle</td>
+					</tr>
+					<tr>
+						<td>.up</td>
+						<td>[0.577,0.577,0.577]</td>
+						<td>Array</td>
+						<td>
+							<strong>normal</strong> is optional. If it is not giving, <strong>JScene.js</strong> will calculate one by using <strong>.corners</strong>. When we use file importing, STL will include the <strong>normal</strong> of each <strong>Triangle</strong> and this situation will bring efficiency improvements;<br>
+							<strong>.up</strong> is nother name for <strong>normal</strong>. Because triangles have front and back sides, <strong>normal</strong> can’t be accurate and express one of the sides, so it’s renamed <strong>.up</strong>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+		
+
+
+
+
+
+			<h3>TriangleSoup</h3>
+			<div class="sub_bloc">
+			<p>A soup is just an Array of <strong>ObjectTriangle</strong></p>
+			<div class='text'>Constructor</div>
+			<pre><code class="language-js">ObjectTriangleSoup(triangles,material=new Material(),name='newSoup')</code></pre>
+			<div class='text'>Example</div>
+			<pre><code class="language-js">var soup = new ObjectTriangleSoup([
+	new ObjectTriangle([[0,0,2],[2,0,1],[0,0,1]]),
+	new ObjectTriangle([[0,0,3],[0,0,2],[1,0,1]]),
+	new ObjectTriangle([[0,0,0],[0,0,1],[0,0,2]], [0,1,0])//manually setting .up
+], Lambertian,'3 trig in 1 soup');</code></pre>
+
+			<table class="api-list">
+				<thead>
+					<tr>
+						<th>Property</th>
+						<th>Default</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>.name</td>
+						<td>'newSoup'</td>
+						<td>String</td>
+						<td>Describe the triangle soup</td>
+					</tr>
+					<tr>
+						<td>.triangles</td>
+						<td>/</td>
+						<td>Array of Triangles</td>
+						<td>Fragment of triangle soup</td>
+					</tr>
+					<tr>
+						<td>.material</td>
+						<td>Lambertian</td>
+						<td>Material</td>
+						<td>Material of triangle soup</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>	<!--  soup sub_bloc -->
+
+
+
+
+			<h3>File.stl -> TriangleSoup</h3>
+			<div class="sub_bloc">
+				<p>STL "Standard Triangle Language": STL files describe only the surface geometry of a three-dimensional object without any representation of color, texture.<br> Currently, this library only supports Ascii .stl file. If you have a binary .stl file, you can convert it on this website <a href="https://www.meshconvert.com/">STL Binary -> STL Ascii</a>, then select output format: Ascii Stereolithography.</p>
+				<div class='text'>Function Needed</div>
+				<pre><code class="language-js">function parse_stl(ascii_STL_file);
+//returns Array of [[Array,Array,Array],Array] repersent a triangle's corners and normal
+function get_triangleSoup(vers_norm, material);
+//returns ObjectTriangleSoup by taking parse_stl(ascii_STL_file)'s return and one material
+</code></pre>
+				<div class='text'>Example</div>
+				<pre><code class="language-js">const stl = document.getElementById("input_stl");
+stl.addEventListener("change", handleFile, false);
+function handleFile() { // after user choose a file
+	parse_stl(this.files[0]).then(data => { //takes first element from FileList
+		var soup = get_triangleSoup(data, Lambertian); // done!
+	}); 
+}</code></pre>
+			</div>	<!-- convert sub_bloc -->
+
+
+
+
+
+
+
+			</div>	<!--  container bloc sub_bloc -->
+		</div>  <!-- container bloc -->
+
+
+		<div class="container bloc">
+			<h2>Functions</h2>
+			<div class="sub_bloc">
+				<p>There are three more functions that can be accessed by the global scope, including two render functions and one cleanup function.</p>
+
+
+				<h3>render_canvas_native(canvas,scene,num_reflect)</h3>
+				<div class="sub_bloc">
+					<p>This function uses recursion to calculate each pixel's color and draw them on the canvas.</p>
+					<table class="api-list">
+						<thead>
+							<tr>
+								<th>Parameter</th>
+								<th>Default</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>canvas</td>
+								<td>Required</td>
+								<td>HTMLCanvasElement</td>
+								<td>Target canvas which we want to draw.</td>
+							</tr>
+							<tr>
+								<td>scene</td>
+								<td>Required</td>
+								<td>Scene</td>
+								<td>The scene contains created objects, and only these objects will participate in the pixel calculation.</td>
+							</tr>
+							<tr>
+								<td>num_reflect</td>
+								<td>Required</td>
+								<td>Number</td>
+								<td>An integer represents the number of times each light can be reflected in the scene.</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class='text'>Example</div>
+					<pre><code class="language-js">var canvas = document.getElementById('canvas');
+var scene = new Scene();
+render_canvas_native(canvas,scene,5);//go to the example page to see more complex cases</code></pre>
+				</div>
+
+				<h3>render_canvas_async(canvas,scene,tiles_w,tiles_h,num_reflect)</h3>
+				<div class="sub_bloc">
+					<p>This function uses web worker and recursion to calculate each pixel's color asynchronously and draw them on the canvas, each sub-process will be responsible for the calculation of <strong>tiles_w</strong> * <strong>tiles_h</strong> pixels.</p>
+					<table class="api-list">
+						<thead>
+							<tr>
+								<th>Parameter</th>
+								<th>Default</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>canvas</td>
+								<td>Required</td>
+								<td>HTMLCanvasElement</td>
+								<td>Target canvas which we want to draw.</td>
+							</tr>
+							<tr>
+								<td>scene</td>
+								<td>Required</td>
+								<td>Scene</td>
+								<td>The scene contains created objects, and only these objects will participate in the pixel calculation.</td>
+							</tr>
+							<tr>
+								<td>tiles_w</td>
+								<td>Required</td>
+								<td>Number</td>
+								<td>The integer represents the maximum horizontal pixel value of the rectangle that each child thread is responsible for loading.</td>
+							</tr>
+							<tr>
+								<td>tiles_h</td>
+								<td>Required</td>
+								<td>Number</td>
+								<td>The integer represents the maximum vertical pixel value of the rectangle that each child thread is responsible for loading.</td>
+							</tr>
+							<tr>
+								<td>num_reflect</td>
+								<td>Required</td>
+								<td>Number</td>
+								<td>An integer represents the number of times each light can be reflected in the scene.</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class='text'>Example</div>
+					<pre><code class="language-js">var canvas = document.getElementById('canvas');
+var scene = new Scene();
+render_canvas_async(canvas,scene,128,128,5);//go to the example page to see more complex cases</code></pre>
+				</div>
+
+
+				<h3>clear_canvas(canvas)</h3>
+				<div class="sub_bloc">
+					<p>This function can efficiently clear the contents of the given canvas.</p>
+					<div class='text'>Example</div>
+					<pre><code class="language-js">var canvas = document.getElementById('canvas');
+clear_canvas(canvas); //the canvas should be empty now</code></pre>
+				</div>
+
+				<h3>Note About Stretched Output</h3>
+				<div class="sub_bloc">
+					<p>Code below checks the resolution of canvas matches the aspect ratio of the camera, which causes stretch.</p>
+					<pre><code class="language-js">var canvas = document.getElementById('canvas');
+var scene = new Scene();
+if(canvas.height/canvas.width != scene.camera.height/scene.camera.width){
+	console.error('warning: aspect ratio does not match with resolution');
+}</code></pre>
+				</div>
+
+			
+			</div>
+		</div>
+
+
+
+
+		<div class="footer container bloc clearfix">
+			<p><strong>JSence v<span>1.0.0</span></strong>, created by 
+			<a href="https://twitter.com/KylSong" target="_blank">Soso Song</a>.<br>
+			<p><strong>Summer 2020</strong></p>
+		</div>
+	</div><!-- main content end here-->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script> 
+	<script src="style/prism.js"></script>
+	<script src="style/bootstrap.min.js"></script>
+	<script src="js/JScene.js"></script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Examples | JScene.js</title>
+	<meta charset="UTF-8">
+
+	<link type="text/css" rel="stylesheet" href="style/style.css">
+	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,700">
+
+	<link type="text/css" rel="stylesheet" href="style/prism.css">
+</head>
+<body class="examples">
+	<header class="main-header"> <!-- top menu -->
+		<div class="container clearfix">
+			<div class="main-nav">
+				<nav>
+				<ul class="clearfix">
+
+					<li>
+						<a class="text-link" href="https://github.com/csc309-summer-2020/js-library-songzhif/blob/master/pub/js/JScene.js" rel="external">Download</a>
+					</li>
+					<li>
+						<a class="text-link" id="nav-api" href="api.html">API</a>
+					</li>
+					<li>
+						<a class="text-link" id="nav-examples" href="examples.html">Examples</a>
+					</li>
+					<li>
+						<a class="text-link" href="landingpage.html" target="_blank" rel="external">Landing</a>
+					</li>
+				</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<div class="main-content">
+		<div class="container bloc">
+			<h1>Examples</h1>
+			<h2>Basic Objects</h2>
+			<p>Basic geometric shapes</p>
+			<div id='c1_s' class="sandbox">
+				<canvas id="c1" class="crisp_canvas" width="500", height="290"></canvas>
+			</div>
+			<div class="sandbox-footer">
+				<div class="option">Change Shape:
+					<select id="c1_select">
+						<option value="plane">Plane</option>
+						<option value="sphere" selected>Sphere</option>
+						<option value="triangle">TrigSoup</option>
+					</select>
+				</div>
+				<div class="render-buttons">
+					<div class="text">Resolution(px):
+						<input type="number" id="c1_w" value="500">&nbspx&nbsp
+						<input type="number" id="c1_h" value="290">&nbsp|
+						<button id="c1_crisp">Crisp(CSS)</button>
+					</div>
+				</div>
+			</div>
+			<div class="sandbox-footer">
+				<div class="text">Tiles(px):</div>
+				<input type="number" id="c1_tw" value="128">&nbspx&nbsp
+				<input type="number" id="c1_th" value="128">&nbsp
+				
+				<div class="render-buttons">
+					<div class="text">Recursion Depth:
+					<input type="number" id="c1_r" value="5">&nbsp|
+					<button id="c1_rn">Render Native</button>
+					<button id="c1_ra">Render Async</button></div>
+				</div>
+			</div>
+
+			<div class="code-wrapper">
+				<ul class="tab-titles">
+					<li class="active">
+						<a href="#basic-js" data-toggle="tab">JS</a>
+					</li>
+					<li>
+						<a href="#basic-html" data-toggle="tab">HTML</a>
+					</li>
+					<li>
+						<a href="#basic-css" data-toggle="tab">CSS</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab active" id="basic-js" data-toggle="pill"><!-------------------------------- -->
+<pre><code id="c1_js" class="language-js">let scene = new Scene();
+scene.add_camera(new Camera());
+scene.add_light(new LightPoint('pointLight',[-2,5,0]));//location
+scene.add_object(new ObjectSphere('sphere', [0,0,9], 1));//location,radius;
+// Using Render Native
+render_canvas_native(canvas,scene,5);
+// Using Render Async
+render_canvas_async(canvas,scene,128,128,5);</code></pre>
+					</div><!-------------------------------------------------------------------------------- -->
+					<div class="tab" id="basic-html" data-toggle="pill">
+<pre><code class="language-html">&lt;canvas id=&quot;c1&quot;&gt;&lt;/canvas&gt;</code></pre>
+					</div>
+					<div class="tab" id="basic-css" data-toggle="pill">
+<pre><code id="c1_css" class="language-css">canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+	image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}</code></pre>
+					</div>
+				</div> <!-- tab-content end here -->
+			</div> <!-- code-wrapper end here -->
+		</div><!-- container bloc" id="canvas-basic-bloc end here -->
+
+
+
+
+
+		<div class="container bloc">
+			<h2>Material</h2>
+			<p>Ambient, Diffuse, Specular, Mirror color, and Phong Exponent</p>
+			<div id='c2_s' class="sandbox">
+				<canvas id="c2" class="crisp_canvas" width="500", height="290"></canvas>
+			</div>
+			<div class="sandbox-footer">
+				<div id="" class="text">
+					ka:&nbsp <input id="c2_ka" type="color" value="#00cccc">&nbsp 
+					kd:&nbsp <input id="c2_kd" type="color" value="#00cccc">&nbsp 
+					ks:&nbsp <input id="c2_ks" type="color" value="#00cccc">&nbsp 
+					km:&nbsp <input id="c2_km" type="color" value="#00cccc">&nbsp 
+					phone:&nbsp<input id="c2_phone" type="number" value="2000">
+				</div>
+			<div class="render-buttons">
+					<div class="text">Resolution(px):
+						<input type="number" id="c2_w" value="500">&nbspx&nbsp
+						<input type="number" id="c2_h" value="290">&nbsp|
+						<button id="c2_crisp">Crisp(CSS)</button>
+					</div>
+				</div>
+			</div>
+			<div class="sandbox-footer">
+				<div class="text">Tiles(px):</div>
+				<input type="number" id="c2_tw" value="128">&nbspx&nbsp
+				<input type="number" id="c2_th" value="128">&nbsp
+				
+				<div class="render-buttons">
+					<div class="text">Recursion Depth:
+					<input type="number" id="c2_r" value="5">&nbsp|
+					<button id="c2_rn">Render Native</button>
+					<button id="c2_ra">Render Async</button></div>
+				</div>
+			</div>
+
+			<div class="code-wrapper">
+				<ul class="tab-titles">
+					<li class="active">
+						<a href="#c2-js" data-toggle="tab">JS</a>
+					</li>
+					<li>
+						<a href="#c2-html" data-toggle="tab">HTML</a>
+					</li>
+					<li>
+						<a href="#c2-css" data-toggle="tab">CSS</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab active" id="c2-js" data-toggle="pill"><!-------------------------------- -->
+<pre><code id="c2_js" class="language-js">let canvas = new Scene();
+canvas.add_camera(new Camera('view',[0,-0.1,0]));//move camera lower
+canvas.add_light(new LightPoint('frontLight',[-2,5,0]));
+canvas.add_light(new LightPoint('backLight',[-1,5,12]));
+canvas.add_object(new ObjectPlane('ground',[0,-1,0], [0,1,0]));
+
+let mat = new Material("customMaterial", 
+		[0,204,204],		//ka	ambient cofficient "ambient color"	- avoid complete dark in shadow
+		[0,204,204],		//kd	diffuse coefficient					- surface color
+		[0,204,204],		//ks	specular coefficient				- reflected light color
+		[0,204,204],2000);	//km 	darker->less reflective				//ph area of light on surface
+canvas.add_object(new ObjectSphere('sphereL', [0.5,0,9], 1, mat));//location,radius;
+canvas.add_object(new ObjectSphere('sphereS', [-0.7,-0.5,7], 0.5, mat));
+
+// Using Render Native
+render_canvas_native(canvas,scene,5);
+// Using Render Async
+render_canvas_async(canvas,scene,128,128,5);</code></pre>
+					</div><!-------------------------------------------------------------------------------- -->
+					<div class="tab" id="c2-html" data-toggle="pill">
+<pre><code class="language-html">&lt;canvas id=&quot;c2&quot;&gt;&lt;/canvas&gt;</code></pre>
+					</div>
+					<div class="tab" id="c2-css" data-toggle="pill">
+<pre><code id="c2_css" class="language-css">canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+	image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}</code></pre>
+					</div>
+				</div> <!-- tab-content end here -->
+			</div> <!-- code-wrapper end here -->
+		</div><!-- container bloc" id="canvas-basic-bloc end here -->
+
+
+
+
+
+		<div class="container bloc">
+			<h2>File Importing</h2>
+			<p>STL "Standard Triangle Language": STL files describe only the surface geometry of a three-dimensional object without any representation of color, texture.</p>
+			<p>Currently this library only supports Ascii .stl file, if you have a binary .stl file, you can convert it on this website <a href="https://www.meshconvert.com/">STL Binary -> STL Ascii</a>, then select output format: Ascii Stereolithography.</p>
+			<div id='c3_s' class="sandbox">
+				<canvas id="c3" class="crisp_canvas" width="500", height="290"></canvas>
+			</div>
+			<div class="sandbox-footer">
+				<div id="" class="text">
+					<a href="file/bunny_ascii.stl" target="_blank" download='bunny_ascii.stl'><button>bunny.stl</button></a>
+					<input id="c3_file" type="file">
+				</div>
+			<div class="render-buttons">
+					<div class="text">Resolution(px):
+						<input type="number" id="c3_w" value="500">&nbspx&nbsp
+						<input type="number" id="c3_h" value="290">&nbsp|
+						<button id="c3_crisp">Crisp(CSS)</button>
+					</div>
+				</div>
+			</div>
+			<div class="sandbox-footer">
+				<div class="text">Tiles(px):</div>
+				<input type="number" id="c3_tw" value="128">&nbspx&nbsp
+				<input type="number" id="c3_th" value="128">&nbsp
+				
+				<div class="render-buttons">
+					<div class="text">Recursion Depth:
+					<input type="number" id="c3_r" value="5">&nbsp|
+					<button id="c3_rn">Render Native</button>
+					<button id="c3_ra">Render Async</button></div>
+				</div>
+			</div>
+
+			<div class="code-wrapper">
+				<ul class="tab-titles">
+					<li class="active">
+						<a href="#c3-js" data-toggle="tab">JS</a>
+					</li>
+					<li>
+						<a href="#c3-html" data-toggle="tab">HTML</a>
+					</li>
+					<li>
+						<a href="#c3-css" data-toggle="tab">CSS</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab active" id="c3-js" data-toggle="pill"><!-------------------------------- -->
+<pre><code id="c3_js" class="language-js">let scene = new Scene();
+let camera = new Camera('cam3', [0,-0.2,2], [0,1,0], [0,0,-1]);//pos,up,direction
+camera.focal_length = 1; // "field of view"
+camera.width  = 1.7777777778;	// ratio of image, better match with resolution
+camera.height = 1;				// or image will be stretched
+scene.add_camera(camera);
+scene.add_light(new LightPoint('backLight',[0,9,-2]));
+scene.add_light(new LightPoint('frontLight',[0,9,2]));
+scene.add_object(new ObjectPlane('ground',[0,-0.8,0], [0,1,0]));
+
+const stl = document.getElementById("input_stl");
+stl.addEventListener("change", handleFile, false);
+function handleFile() { // after user choose a file
+	parse_stl(this.files[0]).then(data => { //ascii_STL_loader
+		scene.add_object(get_triangleSoup(data, blue));
+	}); 
+}
+
+// Using Render Native
+render_canvas_native(canvas,scene,6);
+// Using Render Async
+render_canvas_async(canvas,scene,128,128,6);</code></pre>
+					</div><!-------------------------------------------------------------------------------- -->
+					<div class="tab" id="c3-html" data-toggle="pill">
+<pre><code class="language-html">&lt;canvas id=&quot;c3&quot;&gt;&lt;/canvas&gt;
+&lt;input id="input_stl" type="file"&gt;</code></pre>
+					</div>
+					<div class="tab" id="c3-css" data-toggle="pill">
+<pre><code id="c3_css" class="language-css">canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+	image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}</code></pre>
+					</div>
+				</div> <!-- tab-content end here -->
+			</div> <!-- code-wrapper end here -->
+		</div><!-- container bloc" id="canvas-basic-bloc end here -->
+
+
+		<div class="container bloc">
+			<h2>More Example:--><a href="example_2.html"><button>Go</button></a></h2>
+		</div>
+
+
+
+
+
+
+
+		<div class="footer container bloc clearfix">
+			<p><strong>JSence v<span>1.0.0</span></strong>, created by 
+			<a href="https://twitter.com/KylSong" target="_blank">Soso Song</a>.
+			<p><strong>Summer 2020</strong></p>
+		</div>
+	</div><!-- main content end here-->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script> 
+	<script src="style/prism.js"></script>
+	<script src="style/bootstrap.min.js"></script>
+	<script src="js/JScene.js"></script>
+	<script src="js/example.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>JScene</title>
+		<link rel="stylesheet" href="style/example_2.css">
+		<!--responsive web design make web page look good on all devices-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>
+		<!--the content for head, that div make head has currect width for the page-->
+		<div class = 'headcontent'>
+			<!--add the menu to the page-->
+			<div class="topnav" id="myMenu">
+			 		<a href="landingpage.html">Home</a>
+					<div class="menu-logo icon"><a href="javascript:void(0);">JScene</a></div>
+			  		<!--<a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>-->
+			</div><!--the end of topnav div-->
+			<div class="top-header"> 
+				<h1 id="headerfont"><br>JScene</h1>
+				<p>JavaScript 3D library by songzhif</p>
+			</div>
+		<div class = 'headcontent'>
+
+		<!--the content div is control the max and min width for all content in the body of page -->
+		<div class = 'content'>
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Course Information and Schedule-->
+            <div class="card">
+				<span class="card-title">Apply Objects</span><hr/>
+				<canvas id='canvas'></canvas>
+            </div>
+            <div class="card">
+				<!--make the  container use to add the style for  announcements-->
+				<div class="Anncontainer">
+					<!--the div with no class that marge the title and paragrape type-->
+					<div>
+						<span class="card-title">Scene</span><hr/>
+						
+						<p>Reflection/Recursion Times</p><input id="rec" type="number" value="5"><br>
+						<hr/>
+						<input id="render_native" type="button" value="render_canvas_native" onclick="render_ne();" /><br><hr/>
+						<p>tiles_w</p><input id='tilesw' type="number" value="600"><br>
+						<p>tiles_h</p><input id='tilesh' type="number" value="200"><br>
+						<input id="render_multip" type="button" value="render_multiple_threads" onclick="render_m();" />
+					</div><!--end of simple div-->
+					<div class="scrollbox">
+						<div class="mytable announcements">
+							<div class="heading">
+								<div class="cell">Scene</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									<b>Render canvas native is little bit slow</b><br>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									You can try to change materials for object then click render multiple threads, it will give much difference<br>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									tiles_w and tiles_h will not effect render_canvas_native<br>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									Reflection/Recursion Times means how many time light can reflect in the scene, try to make it 0 render will speed up, but if you try to make it 90000000000, you will not see much difference in performence, why?<br>
+								</div>
+							</div>
+							<div class="row">
+								<div class="cell">
+									Because the scene is kind simple, we don't have two mirror face to each other, therefore, lights only reflect arount 12 times then 'hit function' will return false in our case<br>
+								</div>
+							</div>
+						</div><!--table end-->
+            		</div><!--box end-->
+				</div><!--container end-->
+            </div>
+            <div class="card">
+				<span class="card-title" id="courseteam">Create Basic Objects</span><hr/>
+				<div class="mytable">
+					<div class="heading">
+						<div class="cell">AddCamera</div>
+						<div class="cell">name</div>
+						<div class="cell">location</div>
+						<div class="cell">up vector</div>
+						<div class="cell">front vector</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Camera</b></div>
+						<div class="cell"><input type="text" value="new Camera" disabled></div>
+						<div class="cell"><input type="text" value="[9.6,0.3,10]" disabled></div>
+						<div class="cell"><input type="text" value="[-0.7071067812,0,0.7071067812]" disabled></div>
+						<div class="cell"><input type="text" value="[-0.7071067812,0,-0.7071067812]" disabled></div>
+					</div>
+				</div>
+				<div class="mytable">
+					<div class="heading">
+						<div class="cell">AddLight</div>
+						<div class="cell">name</div>
+						<div class="cell">location</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>PointLight_1</b></div>
+						<div class="cell"><input type="text" value="point_light1"></div>
+						<div class="cell"><input id='pl1' type="text" value="[0.3,9,15]"></div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>PointLight_2</b></div>
+						<div class="cell"><input type="text" value="point_light2"></div>
+						<div class="cell"><input id='pl2' type="text" value="[9,-0.3,15]"></div>
+					</div>
+				</div>
+				<div class="mytable">
+					<div class="heading">
+						<div class="cell">Add Material</div>
+						<div class="cell">name</div>
+						<div class="cell">ka</div>
+						<div class="cell">kd</div>
+						<div class="cell">ks</div>
+						<div class="cell">km</div>
+						<div class="cell">phone</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Material_1</b></div>
+						<div class="cell"><input type="text" value="red metal"></div>
+						<div class="cell"><input id='m1ka' type="color" value="#E41A1C"></div>
+						<div class="cell"><input id='m1kd' type="color" value="#E41A1C"></div>
+						<div class="cell"><input id='m1ks' type="color" value="#E41A1C"></div>
+						<div class="cell"><input id='m1km' type="color" value="#E41A1C"></div>
+						<div class="cell"><input id='m1p' type="number" value="2000"></div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Material_2</b></div>
+						<div class="cell"><input type="text" value="blue metal"></div>
+						<div class="cell"><input id='m2ka' type="color" value="#377EB8"></div>
+						<div class="cell"><input id='m2kd' type="color" value="#377EB8"></div>
+						<div class="cell"><input id='m2ks' type="color" value="#377EB8"></div>
+						<div class="cell"><input id='m2km' type="color" value="#377EB8"></div>
+						<div class="cell"><input id='m2p' type="number" value="2000"></div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Material_3</b></div>
+						<div class="cell"><input type="text" value="green metal"></div>
+						<div class="cell"><input id='m3ka' type="color" value="#4DAF4A"></div>
+						<div class="cell"><input id='m3kd' type="color" value="#4DAF4A"></div>
+						<div class="cell"><input id='m3ks' type="color" value="#4DAF4A"></div>
+						<div class="cell"><input id='m3km' type="color" value="#4DAF4A"></div>
+						<div class="cell"><input id='m3p' type="number" value="2000"></div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Material_4</b></div>
+						<div class="cell"><input type="text" value="purple metal"></div>
+						<div class="cell"><input id='m4ka' type="color" value="#984EA3"></div>
+						<div class="cell"><input id='m4kd' type="color" value="#984EA3"></div>
+						<div class="cell"><input id='m4ks' type="color" value="#984EA3"></div>
+						<div class="cell"><input id='m4km' type="color" value="#984EA3"></div>
+						<div class="cell"><input id='m4p' type="number" value="2000"></div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Material_5</b></div>
+						<div class="cell"><input type="text" value="grey ground"></div>
+						<div class="cell"><input id='m5ka' type="color" value="#333333"></div>
+						<div class="cell"><input id='m5kd' type="color" value="#333333"></div>
+						<div class="cell"><input id='m5ks' type="color" value="#333333"></div>
+						<div class="cell"><input id='m5km' type="color" value="#333333"></div>
+						<div class="cell"><input id='m5p' type="number" value="20"></div>
+					</div>
+				</div>
+				
+				<!-- let camera = new Camera('cam1', [9.6,0.3,10], [-0.7071067812,0,0.7071067812], [-0.7071067812,0,-0.7071067812]); -->
+			</div>
+            
+
+			<div class="card">
+				<span class="card-title" id="courseteam">Create Mesh Objects</span><hr/>
+				<div class="mytable">
+					<div class="heading">
+						<div class="cell">AddPlane</div>
+						<div class="cell">name</div>
+						<div class="cell">location</div>
+						<div class="cell">normal</div>
+						<div class="cell">Material</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Plane</b></div>
+						<div class="cell"><input type="text" value="groundPlane"></div>
+						<div class="cell"><input id='pll' type="text" value="[0,0,-1]"></div>
+						<div class="cell"><input id='pln' type="text" value="[0,0,1]"></div>
+						<div class="cell">
+							<select id='plm'>
+								<option value="1">Material_1</option>
+								<option value="2">Material_2</option>
+								<option value="3">Material_3</option>
+								<option value="4">Material_4</option>
+								<option value="5" selected>Material_5</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="mytable">
+					<div class="heading">
+						<div class="cell">AddSphere</div>
+						<div class="cell">name</div>
+						<div class="cell">location</div>
+						<div class="cell">radius</div>
+						<div class="cell">Material</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Sphere_1</b></div>
+						<div class="cell"><input type="text" value="sphere_red"></div>
+						<div class="cell"><input id='s1l'type="text" value="[0,0,1]"></div>
+						<div class="cell"><input id='s1r'type="text" value="1"></div>
+						<div class="cell">
+							<select id='s1m'>
+								<option value="1"selected>Material_1</option>
+								<option value="2">Material_2</option>
+								<option value="3">Material_3</option>
+								<option value="4">Material_4</option>
+								<option value="5">Material_5</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Sphere_2</b></div>
+						<div class="cell"><input type="text" value="sphere_blue"></div>
+						<div class="cell"><input id='s2l'type="text" value="[2,0,1]"></div>
+						<div class="cell"><input id='s2r'type="text" value="1"></div>
+						<div class="cell">
+							<select id='s2m'>
+								<option value="1">Material_1</option>
+								<option value="2"selected>Material_2</option>
+								<option value="3">Material_3</option>
+								<option value="4">Material_4</option>
+								<option value="5">Material_5</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Sphere_3</b></div>
+						<div class="cell"><input type="text" value="sphere_gree"></div>
+						<div class="cell"><input id='s3l'type="text" value="[1,1.7321,1]"></div>
+						<div class="cell"><input id='s3r'type="text" value="1"></div>
+						<div class="cell">
+							<select id='s3m'>
+								<option value="1">Material_1</option>
+								<option value="2">Material_2</option>
+								<option value="3"selected>Material_3</option>
+								<option value="4">Material_4</option>
+								<option value="5">Material_5</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell"><b>Sphere_4</b></div>
+						<div class="cell"><input type="text" value="sphere_purp"></div>
+						<div class="cell"><input id='s4l'type="text" value="[1,0.57735,2.633]"></div>
+						<div class="cell"><input id='s4r'type="text" value="1"></div>
+						<div class="cell">
+							<select id='s4m'>
+								<option value="1">Material_1</option>
+								<option value="2">Material_2</option>
+								<option value="3">Material_3</option>
+								<option value="4"selected>Material_4</option>
+								<option value="5">Material_5</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- let plane = new ObjectPlane('planename', [0,0,-1], [0,0,1],Lambertian);
+
+				let sphere1 = new ObjectSphere('sphere_red', [0,0,1], 1, red);
+				let sphere2 = new ObjectSphere('sphere_blue', [2,0,1], 1, blue);
+				let sphere3 = new ObjectSphere('sphere_gree', [1,1.7321,1], 1, gree);
+				let sphere4 = new ObjectSphere('sphere_purp', [1,0.57735,2.633], 1, purp); -->
+
+
+				<script src="js/JScene.js"></script>
+				<script src="js/example_2.js"></script>
+	</body>
+</html>
