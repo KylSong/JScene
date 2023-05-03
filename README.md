@@ -1,6 +1,10 @@
-# js-library-songzhif
-<h2>Landing Page</h2>
-<a href="https://jscene.herokuapp.com/">Link</a>
+## Landing Page: <a href="https://jscene.netlify.app/">jscene.netlify.app</a>
+
+
+
+## Documentation: <a href="https://jscene.netlify.app/api/">jscene.netlify.app/api</a>
+
+
 
 <h2>Getting Started</h2>
 <p>To use JScene API, you need to <a href="https://github.com/csc309-summer-2020/js-library-songzhif/blob/master/pub/js/JScene.js">download</a> and reference <strong>JScene.js</strong> in the HTML file.</p>
@@ -15,5 +19,3 @@
 	render_canvas_native(canvas,scene,recur_depth);
 &lt;/script&gt;</code></pre>
 
-<h2>Documentation</h2>
-<a href="https://jscene.herokuapp.com/api.html">Link</a>
